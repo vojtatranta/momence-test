@@ -2,7 +2,9 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { DEFAULT_CURRENCY } from '../common/constants';
+import { formatMoney } from '../common/utils/number';
+
+import { DEFAULT_CURRENCY_CODE } from '../common/constants';
 
 import type { CNBRatesObject, CountryExchangeRate } from '../common/api-types';
 
@@ -28,7 +30,7 @@ const RatesTHAmount = styled.th`
 `;
 const RatesTHRate = styled.th`
 	text-align: right;
-	width: 120px;
+	width: 160px;
 `;
 const RatesTD = styled.td`
 	padding: 5px 4px;
@@ -52,7 +54,7 @@ function RatesTable(props: {
 						<RatesTH>Kód měny</RatesTH>
 						<RatesTH>Země</RatesTH>
 						<RatesTHAmount>Množství cizí měny</RatesTHAmount>
-						<RatesTHRate>Cena v {DEFAULT_CURRENCY}</RatesTHRate>
+						<RatesTHRate>Cena za uvedené množství cizí měny</RatesTHRate>
 					</RatesTR>
 				))}
 			</RatesTHead>
@@ -69,7 +71,7 @@ function RatesTable(props: {
 						<RatesTD>{rate.code}</RatesTD>
 						<RatesTD>{rate.country}</RatesTD>
 						<RatesTDRight>{rate.amount}</RatesTDRight>
-						<RatesTDRight>{rate.rate}</RatesTDRight>
+						<RatesTDRight>{formatMoney(rate.rate, DEFAULT_CURRENCY_CODE)}</RatesTDRight>
 					</RatesTR>
 				))}
 			</RatesTBody>

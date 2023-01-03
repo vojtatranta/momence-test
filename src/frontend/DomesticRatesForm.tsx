@@ -3,9 +3,9 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { Maybe } from '../common/utils/monads';
-import { normalizeDecimalInput } from '../common/utils/number';
+import { formatMoney, normalizeDecimalInput } from '../common/utils/number';
 
-import { DEFAULT_CURRENCY } from '../common/constants';
+import { DEFAULT_CURRENCY, DEFAULT_CURRENCY_CODE } from '../common/constants';
 
 import type { CNBRatesObject, CountryExchangeRate } from '../common/api-types';
 
@@ -36,10 +36,6 @@ const normalizeInputValueForCalculation = (inputValue: string | number): number 
 	}
 
 	return parseFloat(inputValue);
-};
-
-const formatMoney = (amount: string | number, currency: string) => {
-	return `${Number(amount).toFixed(3)}\u00A0${currency}`;
 };
 
 function DomesticRatesForm({
@@ -125,7 +121,7 @@ function DomesticRatesForm({
 			{Maybe.of(calculationState)
 				.map(({ amount, countryExchangeRate }) => (
 					<FormInputResult>
-						Za <strong>{formatMoney(amount, DEFAULT_CURRENCY)}</strong> dostanete{' '}
+						Za <strong>{formatMoney(amount, DEFAULT_CURRENCY_CODE)}</strong> dostanete{' '}
 						<strong>
 							{formatMoney((amount * countryExchangeRate.amount) / countryExchangeRate.rate, countryExchangeRate.code)}
 						</strong>

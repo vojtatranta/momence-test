@@ -1,3 +1,5 @@
+import { DEFAULT_LANGUAGE, DEFAULT_LOCATION } from '../constants';
+
 export const normalizeDecimalInput = (mixedValue: string): string | number | undefined => {
 	const originalValue = mixedValue.replace(',', '.');
 	if (originalValue === '') {
@@ -9,4 +11,13 @@ export const normalizeDecimalInput = (mixedValue: string): string | number | und
 	}
 
 	return originalValue;
+};
+
+export const formatMoney = (amount: string | number, currency: string) => {
+	const moneyFormatter = new Intl.NumberFormat(`${DEFAULT_LANGUAGE}-${DEFAULT_LOCATION}`, {
+		style: 'currency',
+		currency: currency,
+	});
+
+	return moneyFormatter.format(Number(amount));
 };
