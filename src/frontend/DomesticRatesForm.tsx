@@ -2,32 +2,33 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import type { CNBRatesObject, CountryExchangeRate } from '../common/api-types';
 import { Maybe } from '../common/utils/monads';
 import { normalizeDecimalInput } from '../common/utils/number';
+
+import { DEFAULT_CURRENCY } from '../common/constants';
+
+import type { CNBRatesObject, CountryExchangeRate } from '../common/api-types';
 
 const DomesticRatesFormH = styled.h2``;
 const DomesticRatesFormEl = styled.form``;
 const DomesticRatesFormSubmitBtn = styled.button``;
 const FormLabel = styled.label``;
-const FormInput = styled.input``;
+const FormInput = styled.input`
+	height: 22px;
+	padding: 2px;
+`;
 const FormInputError = styled.p``;
 const FormNoData = styled.p`
 	font-size: small;
 `;
 const FormInputResult = styled.p``;
-const RatesSelect = styled.select``;
+const RatesSelect = styled.select`
+	height: 30px;
+	padding: 4px 2px;
+`;
 const RatesOption = styled.option``;
 
 const SUBMIT_BUTTON_TEXT = 'Přepočítat';
-
-const normalizeInputValue = (rawInputValue: string) => {
-	if (rawInputValue.length === 0) {
-		return '';
-	}
-
-	return Math.abs(parseInt(rawInputValue));
-};
 
 const normalizeInputValueForCalculation = (inputValue: string | number): number => {
 	if (typeof inputValue === 'number') {
@@ -41,8 +42,15 @@ const formatMoney = (amount: string | number, currency: string) => {
 	return `${Number(amount).toFixed(3)}\u00A0${currency}`;
 };
 
-function DomesticRatesForm({ data }: { data: CNBRatesObject }) {
-	const [rateToConvert, setRateToConvert] = React.useState<CountryExchangeRate | undefined>(data.rates[0]);
+function DomesticRatesForm({
+	data,
+	rateToConvert,
+	onRateToConvertSet,
+}: {
+	data: CNBRatesObject;
+	rateToConvert: CountryExchangeRate | undefined;
+	onRateToConvertSet: React.Dispatch<React.SetStateAction<CountryExchangeRate | undefined>>;
+}) {
 	const [inputValue, setInputValue] = React.useState<string | number>(rateToConvert?.amount || 1);
 	const [calculationState, setCalculationState] = React.useState<{
 		countryExchangeRate: CountryExchangeRate;
@@ -88,7 +96,7 @@ function DomesticRatesForm({ data }: { data: CNBRatesObject }) {
 						});
 					}}
 				/>
-				&nbsp;CZK
+				&nbsp;{DEFAULT_CURRENCY}
 			</FormLabel>
 			{Maybe.of<CountryExchangeRate>(rateToConvert)
 				.map((actualRateToConvert) => (
@@ -99,26 +107,28 @@ function DomesticRatesForm({ data }: { data: CNBRatesObject }) {
 							<RatesSelect
 								value={actualRateToConvert.code}
 								onChange={(e) => {
-									Maybe.of(data.rates.find((rate) => rate.code === e.currentTarget.value)).map(setRateToConvert);
+									Maybe.of(data.rates.find((rate) => rate.code === e.currentTarget.value)).map(onRateToConvertSet);
 								}}
 							>
 								{data.rates.map((rate) => (
-									<RatesOption key={rate.code} value={rate.code}>{`${rate.code} - ${rate.country}`}</RatesOption>
+									<RatesOption
+										key={rate.code}
+										value={rate.code}
+									>{`${rate.code}-${rate.currency}-${rate.country}`}</RatesOption>
 								))}
 							</RatesSelect>
 						</FormLabel>
 					</>
 				))
 				.andThenWithDefault(<FormInputError>Bohužel, nejsou známy žádné kurzy.</FormInputError>)}
+
 			{Maybe.of(calculationState)
-				.map((calculationState) => (
+				.map(({ amount, countryExchangeRate }) => (
 					<FormInputResult>
-						Za {formatMoney(calculationState.amount, 'CZK')} dostanete{' '}
-						{formatMoney(
-							(calculationState.amount * calculationState.countryExchangeRate.amount) /
-								calculationState.countryExchangeRate.rate,
-							calculationState.countryExchangeRate.code
-						)}
+						Za <strong>{formatMoney(amount, DEFAULT_CURRENCY)}</strong> dostanete{' '}
+						<strong>
+							{formatMoney((amount * countryExchangeRate.amount) / countryExchangeRate.rate, countryExchangeRate.code)}
+						</strong>
 					</FormInputResult>
 				))
 				.andThenWithDefault(<FormNoData>Pro výpočet zadejte částku a klikněte na "{SUBMIT_BUTTON_TEXT}".</FormNoData>)}
