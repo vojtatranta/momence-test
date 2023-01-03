@@ -23,5 +23,10 @@
   "include": [
     "src",
     "./.eslintrc.js"
-  ]
+  ],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  },
 }
