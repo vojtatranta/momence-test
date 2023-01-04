@@ -20,6 +20,12 @@ Second, start the frontend application
 $ yarn start
 ```
 
+Third, you can run all tests:
+```
+$ yarn test --watchAll=false
+```
+
+
 ## Challenges
 
 Dates. Dates in Javascript with timezones are the problem. Obviously, there are multiple ways to approach. The correct (and the easiest one) would be to use only UTC timezone for both client and the API. However, given the Czech context I decide to take a more complicated route and use date on client and on the server in Czech context only.
@@ -45,4 +51,5 @@ The correct way how to handle this would be a business decisions. Adding UTC-onl
 - Demonstrate ability to run without the server (veeery easy).
 - Pesky decimal inputs. Basically, `type=number` for input is not helpful. There must be a library that solves inputing of decimals and parsing the correct result out of it. I could find but that would not be any challenge.
 - Consolidate usage of `Maybe` monade. I wanted to use `Maybe` monad in JSX for a long time but I haven't had a chance. It looks okayish now, but some improvements would make the readability far better. I still think it is better than ternary operators in JSX. Sure, using `<If></If>` is be better. But that's so uncool :),
-- Add more tests.
+- Add more tests. Especially for components like the decimal CZK amount input.
+- Add Cypress for UI tests
