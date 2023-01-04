@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { QueryClient, QueryClientProvider, useQuery } from 'react-query';
+import { QueryClientProvider, useQuery } from 'react-query';
 
 export type ApiFn = <T>(url: string, successStatusCodes?: number[]) => Promise<T>;
 
@@ -33,7 +33,7 @@ export const CompleteApiContext = (
 ) => {
 	return (
 		<QueryClientProvider client={props.client}>
-			<ApiContext.Provider value={createRequest}>{props.children}</ApiContext.Provider>
+			<ApiContext.Provider value={props.createRequest}>{props.children}</ApiContext.Provider>
 		</QueryClientProvider>
 	);
 };

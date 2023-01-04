@@ -80,6 +80,7 @@ function DomesticRatesForm({
 				Převeďte:{' '}
 				<FormInput
 					value={inputValue}
+					data-testid='czk-amount-input'
 					type='text'
 					onFocus={(event) => event.currentTarget.select()}
 					onChange={(event) => {
@@ -102,6 +103,7 @@ function DomesticRatesForm({
 							na{' '}
 							<RatesSelect
 								value={actualRateToConvert.code}
+								data-testid='rates-select'
 								onChange={(e) => {
 									Maybe.of(data.rates.find((rate) => rate.code === e.currentTarget.value)).map(onRateToConvertSet);
 								}}
@@ -120,7 +122,7 @@ function DomesticRatesForm({
 
 			{Maybe.of(calculationState)
 				.map(({ amount, countryExchangeRate }) => (
-					<FormInputResult>
+					<FormInputResult data-testid='calculation-result'>
 						Za <strong>{formatMoney(amount, DEFAULT_CURRENCY_CODE)}</strong> dostanete{' '}
 						<strong>
 							{formatMoney((amount * countryExchangeRate.amount) / countryExchangeRate.rate, countryExchangeRate.code)}
@@ -128,7 +130,9 @@ function DomesticRatesForm({
 					</FormInputResult>
 				))
 				.andThenWithDefault(<FormNoData>Pro výpočet zadejte částku a klikněte na "{SUBMIT_BUTTON_TEXT}".</FormNoData>)}
-			<DomesticRatesFormSubmitBtn type='submit'>{SUBMIT_BUTTON_TEXT}</DomesticRatesFormSubmitBtn>
+			<DomesticRatesFormSubmitBtn type='submit' data-testid='rates-submit'>
+				{SUBMIT_BUTTON_TEXT}
+			</DomesticRatesFormSubmitBtn>
 		</DomesticRatesFormEl>
 	);
 }

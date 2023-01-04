@@ -46,7 +46,7 @@ function RatesTable(props: {
 	onRateToConvertSet: React.Dispatch<React.SetStateAction<CountryExchangeRate | undefined>>;
 }) {
 	return (
-		<RatesTableEl>
+		<RatesTableEl data-testid='rates-table'>
 			<RatesTHead>
 				{[props.data.rates[0]].filter(Boolean).map((key) => (
 					<RatesTR key={key.code}>
