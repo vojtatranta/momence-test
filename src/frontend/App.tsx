@@ -1,12 +1,11 @@
 import React from 'react';
-import { useQuery } from 'react-query';
 import { createCNBDataUrl, dateToUrlFormat } from '../common/utils/urls';
 import { ApiErrorResponse, CNBRatesObject, CountryExchangeRate } from '../common/api-types';
 import styled from 'styled-components';
 import RatesTable from './RatesTable';
 import DomesticRatesForm from './DomesticRatesForm';
 import { Maybe } from '../common/utils/monads';
-import { createRequest } from './api';
+import { useReactQueryApi } from './api';
 
 const Container = styled.section`
 	max-width: 960px;
@@ -53,9 +52,10 @@ function App({ initialDate }: { initialDate: Date }) {
 		};
 	}, [setDate]);
 
-	const { isLoading, error, data } = useQuery<CNBRatesObject, ApiErrorResponse>(['cnbRates', dateString], () =>
-		createRequest(createCNBDataUrl(dateString))
-	);
+	const { isLoading, error, data } = useReactQueryApi<CNBRatesObject, ApiErrorResponse>(createCNBDataUrl(dateString), [
+		'cnbRates',
+		dateString,
+	]);
 
 	if (isLoading) {
 		return (
