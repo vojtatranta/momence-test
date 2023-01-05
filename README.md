@@ -51,6 +51,7 @@ The correct way how to handle this would be a business decisions. Adding UTC-onl
 ### Frontend
 
 - Poor UX of the "having to click Přepočítat button to get new result". To fix that, there should be way of telling the user tha the displayed result is outdated.
+- Style the app seriously :).
 - Demonstrate ability to run without the server (veeery easy).
 - Pesky decimal inputs. Basically, `type=number` for input is not helpful. There must be a library that solves inputing of decimals and parsing the correct result out of it. I could find but that would not be any challenge.
 - Consolidate usage of `Maybe` monade. I wanted to use `Maybe` monad in JSX for a long time but I haven't had a chance. It looks okayish now, but some improvements would make the readability far better. I still think it is better than ternary operators in JSX. Sure, using `<If></If>` is be better. But that's so uncool :),
