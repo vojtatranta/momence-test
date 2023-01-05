@@ -34,6 +34,9 @@ The correct way how to handle this would be a business decisions. Adding UTC-onl
 
 ## Improvements
 
+### Dev ops
+- Obviously, it would be nice to add deployment pipeline. Though, with Node.js backend it gets a bit complicated. Nevertheless, with serverless version it would be easy.
+
 ### Backend
 
 - Backend in general is not needed at all, but I just wanted to jump into it, I haven't written Node.js backend in a while :).
